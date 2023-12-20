@@ -81,18 +81,20 @@ if 'book' in BookUrl:
     BookDetailUrl = 'https://m.lrts.me/ajax/getBookInfo?id=%s'%BookID
     BookDetail = conn.get(BookDetailUrl,headers=headers).json()
     print('当前解析书籍：',BookDetail['name'],'---',BookDetail['author'])
-    ListUrl = 'https://m.lrts.me/ajax/getBookMenu?bookId=%s&pageNum=1&pageSize=5000&sortType=0'%BookID
+    ListUrl = 'https://m.lrts.me/ajax/getBookMenu?bookId=%s&pageNum=1&pageSize=50&sortType=0'%BookID
     LenDetail = conn.get(ListUrl,headers=headers).json()
     AudioList = LenDetail['list']
+    #print(AudioList)
     page = 1
     while True:
-        if len(AudioList) % 1000 ==0:
+        if len(AudioList) % 50 ==0:
             page+=1
             print('抓取第%s页……'%page)
             time.sleep(5)
-            ListUrl = 'https://m.lrts.me/ajax/getBookMenu?bookId=%s&pageNum=%s&pageSize=5000&sortType=0'%(BookID,page)
+            ListUrl = 'https://m.lrts.me/ajax/getBookMenu?bookId=%s&pageNum=%s&pageSize=50&sortType=0'%(BookID,page)
             LenDetail = conn.get(ListUrl,headers=headers).json()
             AudioList = AudioList + LenDetail['list']
+            break
         else :
             break
     Len = len(AudioList)        
